@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .input {
+        @apply w-[800px] border border-gray-400 rounded-md px-3 py-2 focus:outline-none
+    }
+
+    .baja {
+        @apply text-green-800
+    }
+
+    .media {
+        @apply text-yellow-300
+    }
+
+    .alta {
+        @apply text-red-500
+    }
+
+    .modal {
+        @apply inset-0 fixed flex items-center justify-center bg-[#0000008d] transition-opacity duration-300 pointer-events-none opacity-0
+    }
+
+    .modal_container {
+        @apply bg-blue-chill-200 rounded-xl relative w-auto mt-10 mb-10
+    }
+
+    .modal_close {
+        @apply absolute right-[-20px] top-[-20px] p-4 py-2 bg-red-600 rounded-full text-white font-bold text-xl cursor-pointer
+    }
+
+    .show {
+        @apply opacity-100 pointer-events-auto
+    }
+
+    .notification {
+        @apply border-[3px] border-green-500 bg-[#D3D3D3] bg-opacity-30 px-3 py-2 rounded-md text-lg font-bold text-green-800
+    }
+
+    .notification-error {
+        @apply border-[3px] border-red-500 bg-[#D3D3D3] bg-opacity-30 px-3 py-2 rounded-md text-lg font-bold text-red-800
+    }
+}

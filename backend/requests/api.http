@@ -1,0 +1,36 @@
+### Obtener todas las tareas
+GET http://localhost:3001/api/tasks
+
+### Obtener tarea por id
+GET http://localhost:3001/api/tasks/66a7285ca14e8d1aa8fef1ee
+### Crear tarea
+POST http://localhost:3001/api/tasks 
+Content-Type: application/json
+
+{
+    "title": "a siii",
+    "description": "suscribete a midudev",
+    "priority": "alta"
+}
+
+### Actualizar tarea
+PUT http://localhost:3001/api/tasks/66a7285ca14e8d1aa8fef1ee
+Content-Type:  application/json
+
+{
+    "title": "nuevo titulo",
+    "description": "nueva descripcion",
+    "priority": "alta"
+}
+
+### Eliminar tarea
+DELETE  http://localhost:3001/api/tasks/66a3020752f0a3e4b2a0347d
+
+### Actualizar complete
+
+PATCH  http://localhost:3001/api/tasks/66a8759a0a41dddf6425ded8/completed
+Content-Type: application/json
+
+{
+    "completed": true
+}
