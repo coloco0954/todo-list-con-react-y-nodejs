@@ -28,12 +28,12 @@ Antes de comenzar, asegúrate de cumplir con los siguientes requisitos:
 
 1. Clona el repositorio:
     ```sh
-    git clone https://github.com/tu-usuario/todo-list-con-react-y-nodejs
+    git clone https://github.com/coloco0954/todo-list-con-react-y-nodejs
     ```
 
 2. Navega al directorio del proyecto:
     ```sh
-    cd todo-list
+    cd to-do-list
     ```
 
 3. Instala las dependencias del backend:
