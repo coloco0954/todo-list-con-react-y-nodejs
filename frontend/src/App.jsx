@@ -114,6 +114,7 @@ const App = () => {
   const handleAddTask = async (e) => {
     e.preventDefault() // Evitamos el comportamiento por defecto
 
+
     // Si no se le pasa un titulo se le suma 1 al estado de notTitle
     if (!taskInfo.title) {
       setNotTitle(notTitle + 1)

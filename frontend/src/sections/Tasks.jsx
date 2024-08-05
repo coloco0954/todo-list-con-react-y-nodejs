@@ -31,8 +31,8 @@ const Tasks = ({ tasks, searchValue, onClickCheck, onClickDelete, onClickUpdate,
     }
 
     return (
-        <div className="flex items-center justify-center small-smartphone:items-start small-smartphone:justify-normal w-full">
-            {tasks.length === 0 ? 'No hay tareas agegadas' : <div className="w-full small-pc:w-[80%] small-pc:ml-[130px]">
+        <div className="flex  small-smartphone:items-start small-smartphone:justify-normal w-full small small-pc:items-center small-pc:justify-center">
+            {tasks.length === 0 ? 'No hay tareas agegadas' : <div className="w-full small-pc:w-[80%] small-pc:ml-[90px]">
                 {tasks
                     .filter(task => {
                         // Si la descripcion en minuscula coincide con el valor buscado entonces devuelve la tarea
@@ -45,7 +45,7 @@ const Tasks = ({ tasks, searchValue, onClickCheck, onClickDelete, onClickUpdate,
                         return (
                             // Si la tarea esta completada se pondra una linea en todo el texto
                             <div key={task.id} id={task.id} className={task.completed ? 'mb-4 line-through small-smartphone:w-auto small-smartphone:mx-3' : 'mb-4 small-smartphone:w-auto small-smartphone:mx-3'}>
-                                <div className="flex flex-row bg-blue-chill-400 w-[900px] px-2 py-2  justify-between small-smartphone:w-full">
+                                <div className="flex flex-row bg-blue-chill-400 px-2 py-2  justify-between small-smartphone:w-full">
                                     <div className="flex flex-row gap-x-2 big-smartphone:gap-x-3">
                                         <CheckTask onClick={onClickCheck} isCompleted={task.completed} />
                                         <h1 className="text-2xl small-smartphone:text-[18px] font-medium">{task.title}</h1>
