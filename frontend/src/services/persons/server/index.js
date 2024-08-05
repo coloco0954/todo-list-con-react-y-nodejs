@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseURL = 'http://localhost:3001/api/tasks'
+const baseURL = 'https://api-tasks-cud1.onrender.com/api/tasks'
 
 export const getAll = async () => {
     try {
