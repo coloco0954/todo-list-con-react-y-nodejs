@@ -22,8 +22,18 @@ export default {
           '900': '#2d464c',
           '950': '#1a2c32',
         },
-
-      }
+      },
+      screens: {
+        'small-smartphone': '320px',
+        'medium-smartphone': '390px',
+        'big-smartphone': '414px',
+        'small-tablet': '768px',
+        'medium-tablet': '820px',
+        'big-tablet': '1024px',
+        'small-pc': '1280px',
+        // 'medium-pc': '1440px',
+        // 'big-pc': '1536px'
+      },
     },
   },
   plugins: [animations],

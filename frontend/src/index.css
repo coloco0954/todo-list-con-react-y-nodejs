@@ -24,7 +24,7 @@
     }
 
     .modal_container {
-        @apply bg-blue-chill-200 rounded-xl relative w-auto mt-10 mb-10
+        @apply bg-blue-chill-200 rounded-xl relative w-auto mt-10 mb-10 small-smartphone:w-[355px] small-tablet:w-[650px] medium-tablet:w-[700px] big-tablet:w-[850px] small-pc:w-[900px]
     }
 
     .modal_close {

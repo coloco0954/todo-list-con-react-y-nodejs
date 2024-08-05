@@ -7,7 +7,7 @@ import Loader from './components/Loader'
 import { Notification, NotificationError } from './components/Notifications'
 
 // Importacion de las funciones que llaman al backend
-import { getAll, add as addTask, deleteTask, update as updateTask, updateCheck, add } from "./services/persons/server"
+import { getAll, add as addTask, deleteTask, update as updateTask, updateCheck } from "./services/persons/server"
 
 const App = () => {
   const [tasks, setTasks] = useState([]) // Estado que almacena las tareas
@@ -295,16 +295,18 @@ const App = () => {
   }
 
   return (
-    <div>
-      <Header searchValue={searchValue} onChangeSearch={handleChangeSearch} />
+    <div className="w-full">
+      <div className="w-full">
+        <Header searchValue={searchValue} onChangeSearch={handleChangeSearch} />
 
-      <Notification message={message} />
-      <NotificationError message={messageError} />
+        <Notification message={message} />
+        <NotificationError message={messageError} />
 
-      < FormTask onSubmit={handleAddTask} taskInfo={taskInfo} onChangeTitle={handleChangeTitle} onChangeDescription={handleChangeDescription} onChangePriority={handleChangePriority} />
+        < FormTask onSubmit={handleAddTask} taskInfo={taskInfo} onChangeTitle={handleChangeTitle} onChangeDescription={handleChangeDescription} onChangePriority={handleChangePriority} />
 
-      {/* Si loading es true se mostrara el loader y si es false se mostrara la lista de tareas */}
-      {loading ? <Loader /> : <Tasks tasks={tasks} searchValue={searchValue} onClickCheck={handleCheckTask} onClickDelete={handleDeleteTask} onClickUpdate={handlUpdateTask} onChangeTitle={handleChangeNewTitle} onChangeDescription={handleChangeNewDescription} onChangePriority={handleChangeNewPriority} title={newTaskInfo.newTitle} description={newTaskInfo.newDescription} priority={newTaskInfo.newPriority} />}
+        {/* Si loading es true se mostrara el loader y si es false se mostrara la lista de tareas */}
+        {loading ? <Loader /> : <Tasks tasks={tasks} searchValue={searchValue} onClickCheck={handleCheckTask} onClickDelete={handleDeleteTask} onClickUpdate={handlUpdateTask} onChangeTitle={handleChangeNewTitle} onChangeDescription={handleChangeNewDescription} onChangePriority={handleChangeNewPriority} title={newTaskInfo.newTitle} description={newTaskInfo.newDescription} priority={newTaskInfo.newPriority} />}
+      </div>
     </div>
   )
 }
