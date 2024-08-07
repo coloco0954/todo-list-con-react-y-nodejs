@@ -35,11 +35,19 @@
         @apply opacity-100 pointer-events-auto
     }
 
+    .hidde {
+        @apply pointer-events-none opacity-0
+    }
+
     .notification {
         @apply border-[3px] border-green-500 bg-[#D3D3D3] bg-opacity-30 px-3 py-2 rounded-md text-lg font-bold text-green-800
     }
 
     .notification-error {
         @apply border-[3px] border-red-500 bg-[#D3D3D3] bg-opacity-30 px-3 py-2 rounded-md text-lg font-bold text-red-800
+    }
+
+    .modal_filters {
+        @apply fixed inset-0 flex items-center justify-center bg-[#0000008d] transition-opacity duration-300
     }
 }

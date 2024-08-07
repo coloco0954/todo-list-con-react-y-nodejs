@@ -1,5 +1,6 @@
 import CheckTask from "../components/CheckTask"
 import FormEdit from "./FormEdit"
+
 const Tasks = ({ tasks, searchValue, onClickCheck, onClickDelete, onClickUpdate, onChangeTitle, onChangeDescription, onChangePriority, title, description, priority }) => {
 
     const handleShowDescription = (e) => {

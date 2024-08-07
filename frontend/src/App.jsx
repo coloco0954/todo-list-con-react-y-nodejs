@@ -7,7 +7,7 @@ import Loader from './components/Loader'
 import { Notification, NotificationError } from './components/Notifications'
 
 // Importacion de las funciones que llaman al backend
-import { getAll, add as addTask, deleteTask, update as updateTask, updateCheck } from "./services/persons/server"
+import { getAll, add as addTask, deleteTask, update as updateTask, updateCheck } from "./services/tasks/server"
 
 const App = () => {
   const [tasks, setTasks] = useState([]) // Estado que almacena las tareas
@@ -108,6 +108,61 @@ const App = () => {
   // Funcion que maneja el valor de la busqueda
   const handleChangeSearch = (e) => {
     setSearchValue(e.target.value)
+  }
+
+  // Funcion para filtrar tareas
+  const handleChangeFilter = async (e) => {
+    // Obtenemos el valor del filtro
+    const filter = e.target.value
+
+    try {
+      // Obtenemos las tareas
+      const tasks = await getAll()
+      // Variable para almacenar las tareas filtradas
+      let filteredTasks
+
+      switch (filter) {
+        case "todas": {
+          // Filtramos todas las tareas
+          filteredTasks = tasks
+          break
+        }
+
+        case "completadas": {
+          // Filtramos por tareas completadas
+          filteredTasks = tasks.filter(task => task.completed === true)
+          break
+        }
+
+        case "incompletas": {
+          // Filtramos por tareas incompletas
+          filteredTasks = tasks.filter(task => task.completed === false)
+          break
+        }
+
+        // Error para filtros invalidos
+        default: {
+          filteredTasks = []
+          setMessageError('Filtro no valido')
+
+          setTimeout(() => {
+            setMessageError(null)
+          }, 3000)
+
+          return
+        }
+      }
+
+      // Mostramos las tareas filtradas
+      setTasks(filteredTasks)
+    } catch (error) {
+      // Si hay un error se le informa al usuario
+      setMessageError(`Error al filtrar por ${filter}`)
+
+      setTimeout(() => {
+        setMessageError(null)
+      }, 3000)
+    }
   }
 
   // Funcion para agregar tarea
@@ -303,7 +358,7 @@ const App = () => {
         <Notification message={message} />
         <NotificationError message={messageError} />
 
-        < FormTask onSubmit={handleAddTask} taskInfo={taskInfo} onChangeTitle={handleChangeTitle} onChangeDescription={handleChangeDescription} onChangePriority={handleChangePriority} />
+        < FormTask onSubmit={handleAddTask} taskInfo={taskInfo} onChangeTitle={handleChangeTitle} onChangeDescription={handleChangeDescription} onChangePriority={handleChangePriority} onChangeFilter={handleChangeFilter} />
 
         {/* Si loading es true se mostrara el loader y si es false se mostrara la lista de tareas */}
         {loading ? <Loader /> : <Tasks tasks={tasks} searchValue={searchValue} onClickCheck={handleCheckTask} onClickDelete={handleDeleteTask} onClickUpdate={handlUpdateTask} onChangeTitle={handleChangeNewTitle} onChangeDescription={handleChangeNewDescription} onChangePriority={handleChangeNewPriority} title={newTaskInfo.newTitle} description={newTaskInfo.newDescription} priority={newTaskInfo.newPriority} />}
