@@ -3,7 +3,7 @@ import Filter from './Filter'
 
 const Header = ({ searchValue, onChangeSearch }) => {
     return (
-        <header className="bg-blue-chill-300 justify-between flex flex-row px-5 py-4 animate-slide-in-top animate-duration-normal w-auto">
+        <header className="bg-blue-chill-300 dark:bg-blue-chill-950 justify-between flex flex-row px-5 py-4 animate-slide-in-top animate-duration-normal w-auto">
             <Filter searchValue={searchValue} onChange={onChangeSearch} />
             <div className='flex flex-row gap-x-2 '>
                 <SwitchToggle />

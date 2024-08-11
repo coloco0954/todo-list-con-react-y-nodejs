@@ -1,6 +1,7 @@
 import AddButton from '../components/AddButton'
 import Filters from './Filters'
-
+import FilterSwitcher from '../components/ImageSwitcher/FilterSwitcher'
+import DeploySwitcher from '../components/ImageSwitcher/DeploySwitcher'
 
 const FormTask = ({ onSubmit, taskInfo, onChangeTitle, onChangeDescription, onChangePriority, onChangeFilter }) => {
 
@@ -36,9 +37,9 @@ const FormTask = ({ onSubmit, taskInfo, onChangeTitle, onChangeDescription, onCh
     return (
         <form action="" onSubmit={onSubmit} className="flex items-center justify-center flex-col mt-[90px] mb-[60px] animate-fade-in ">
             <div className="flex flex-row gap-x-2 small-smartphone:w-auto small-smartphone:gap-x-0 medium-smartphone:w-auto big-smartphone:gap-x-[2px]">
-                <img src="./deploy-icon.svg" alt="" className='-ml-10 cursor-pointer' title='Mostrar mas opciones' onClick={handleShowAllOptions} />
+                <DeploySwitcher onClick={handleShowAllOptions} />
                 <input name="" id="" placeholder="agrega descripcion de la tarea" value={taskInfo.description} onChange={onChangeDescription} required className='input small-smartphone:w-[230px] medium-smartphone:w-[250px] big-smartphone:w-[265px] small-tablet:w-[550px] medium-tablet:w-[650px] big-tablet:w-[830px] small-pc:w-[850px]' />
-                <img src="./filter.svg" alt="" className='cursor-pointer' title='filtros' onClick={handleShowFilters} />
+                <FilterSwitcher onClick={handleShowFilters} />
                 <AddButton />
             </div>
             <div className="hidden small-smartphone:w-full small-smartphone:ml-[83px] medium-smartphone:w-auto medium-smartphone:ml-0" id="more-options">

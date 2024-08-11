@@ -7,7 +7,7 @@ import Loader from './components/Loader'
 import { Notification, NotificationError } from './components/Notifications'
 
 // Importacion de las funciones que llaman al backend
-import { getAll, add as addTask, deleteTask, update as updateTask, updateCheck } from "./services/tasks/server"
+import { getAll, add as addTask, deleteTask, update as updateTask, updateCheck } from "./services/tasks/api"
 
 const App = () => {
   const [tasks, setTasks] = useState([]) // Estado que almacena las tareas

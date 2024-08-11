@@ -8,7 +8,7 @@
     }
 
     .baja {
-        @apply text-green-800
+        @apply text-green-800 dark:text-green-500
     }
 
     .media {
@@ -16,7 +16,7 @@
     }
 
     .alta {
-        @apply text-red-500
+        @apply text-red-500 dark:text-red-400
     }
 
     .modal {
@@ -24,7 +24,7 @@
     }
 
     .modal_container {
-        @apply bg-blue-chill-200 rounded-xl relative w-auto mt-10 mb-10 small-smartphone:w-[355px] small-tablet:w-[650px] medium-tablet:w-[700px] big-tablet:w-[850px] small-pc:w-[900px]
+        @apply bg-blue-chill-200 dark:bg-blue-chill-700 rounded-xl relative w-auto mt-10 mb-10 small-smartphone:w-[355px] small-tablet:w-[650px] medium-tablet:w-[700px] big-tablet:w-[850px] small-pc:w-[900px]
     }
 
     .modal_close {
@@ -40,11 +40,11 @@
     }
 
     .notification {
-        @apply border-[3px] border-green-500 bg-[#D3D3D3] bg-opacity-30 px-3 py-2 rounded-md text-lg font-bold text-green-800
+        @apply border-[3px] border-green-500 bg-[#D3D3D3] bg-opacity-30 px-3 py-2 rounded-md text-lg font-bold text-green-800 dark:text-green-400
     }
 
     .notification-error {
-        @apply border-[3px] border-red-500 bg-[#D3D3D3] bg-opacity-30 px-3 py-2 rounded-md text-lg font-bold text-red-800
+        @apply border-[3px] border-red-500 bg-[#D3D3D3] bg-opacity-30 px-3 py-2 rounded-md text-lg font-bold text-red-800 dark:text-red-400
     }
 
     .modal_filters {

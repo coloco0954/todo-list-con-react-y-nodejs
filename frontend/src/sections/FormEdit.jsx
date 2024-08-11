@@ -10,7 +10,7 @@ const FormEdit = ({ onSubmit, title, titleValue, descriptionValue, priorityValue
                     X
                 </div>
 
-                <h1 className="text-center font-bold text-2xl">Editar tarea ({title})</h1>
+                <h1 className="text-center font-bold text-2xl dark:text-gray-300">Editar tarea ({title})</h1>
 
                 <form className="flex flex-col gap-y-7 px-3 py-2" onSubmit={onSubmit}>
                     <input type="text" className="input w-[700px] small-smartphone:w-[330px] small-tablet:w-full" placeholder="nuevo titulo" value={titleValue} onChange={newTitle} required />
@@ -22,7 +22,7 @@ const FormEdit = ({ onSubmit, title, titleValue, descriptionValue, priorityValue
                             <option value="alta">alta</option>
                         </optgroup>
                     </select>
-                    <button className="bg-transparent border border-gray-500 py-2 rounded-md hover:bg-gray-500 hover:text-white transition-all duration-200">Guardar cambios</button>
+                    <button className="bg-transparent border border-gray-500 py-2 rounded-md hover:bg-gray-500 hover:text-white transition-all duration-200 dark:border-gray-400 dark:hover:bg-gray-400">Guardar cambios</button>
                 </form>
             </div>
         </section>
