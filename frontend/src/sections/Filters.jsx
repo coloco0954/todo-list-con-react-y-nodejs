@@ -9,9 +9,9 @@ const Filters = ({ handleChangeFilter }) => {
                 <div className="absolute right-[-20px] top-[-20px] p-4 py-2 bg-red-600 rounded-full text-white font-bold text-xl cursor-pointer" onClick={handleCloseFilters}>
                     X
                 </div>
-                <h1 className="text-2xl text-center font-bold text-gray-300">Filtros</h1>
+                <h1 className="text-2xl text-center font-bold dark:text-gray-300">Filtros</h1>
 
-                <div action="" className="flex flex-col gap-y-7 px-3 py-2 text-gray-300">
+                <div action="" className="flex flex-col gap-y-7 px-3 py-2 dark:text-gray-300">
                     <label htmlFor="">
                         <input type="radio" name="filter" id="" value={'todas'} onChange={handleChangeFilter} /> Todas las tareas
                     </label>
