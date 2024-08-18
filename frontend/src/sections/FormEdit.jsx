@@ -1,5 +1,4 @@
-const FormEdit = ({ onSubmit, title, titleValue, descriptionValue, priorityValue, newTitle, newDescription, newPriority }) => {
-
+const FormEdit = ({ onSubmit, title, handleInputChange, newTaskInfo }) => {
     const handleCloseModal = (e) => {
         e.target.parentElement.parentElement.classList.remove('show')
     }
@@ -13,9 +12,9 @@ const FormEdit = ({ onSubmit, title, titleValue, descriptionValue, priorityValue
                 <h1 className="text-center font-bold text-2xl dark:text-gray-300">Editar tarea ({title})</h1>
 
                 <form className="flex flex-col gap-y-7 px-3 py-2" onSubmit={onSubmit}>
-                    <input type="text" className="input w-[700px] small-smartphone:w-[330px] small-tablet:w-full" placeholder="nuevo titulo" value={titleValue} onChange={newTitle} required />
-                    <input type="text" className="input w-[700px] small-smartphone:w-[330px] small-tablet:w-full" placeholder="nueva descripcion" value={descriptionValue} onChange={newDescription} required />
-                    <select name="" id="" className='rounded-md focus:outline-none w-[700px] small-smartphone:w-[330px] px-2 py-1 small-tablet:w-full' value={priorityValue} onChange={newPriority}>
+                    <input type="text" className="input w-[700px] small-smartphone:w-[330px] small-tablet:w-full" placeholder="nuevo titulo" value={newTaskInfo.title} onChange={handleInputChange} name="title" required autoComplete="off" />
+                    <input type="text" className="input w-[700px] small-smartphone:w-[330px] small-tablet:w-full" placeholder="nueva descripcion" value={newTaskInfo.description} onChange={handleInputChange} name="description" required autoComplete="off" />
+                    <select name="priority" id="" className='rounded-md focus:outline-none w-[700px] small-smartphone:w-[330px] px-2 py-1 small-tablet:w-full' value={newTaskInfo.priority} onChange={handleInputChange}>
                         <optgroup label="Elija la prioridad">
                             <option value="baja">baja</option>
                             <option value="media">media</option>

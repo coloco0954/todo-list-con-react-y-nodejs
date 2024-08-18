@@ -1,31 +1,46 @@
-// Importacion de hooks y componentes
+// Importaciones
 import { useState, useEffect } from "react"
+// Custom hooks
+import useForm from "./hooks/useHandleForm"
+import useNotification from './hooks/useNotification'
+
+// Secciones de la pagina
 import Header from './sections/Header'
 import FormTask from "./sections/FormTask"
 import Tasks from "./sections/Tasks"
+
+// Componentes de la pagina
 import Loader from './components/Loader'
 import { Notification, NotificationError } from './components/Notifications'
 
-// Importacion de las funciones que llaman al backend
-import { getAll, add as addTask, deleteTask, update as updateTask, updateCheck } from "./services/tasks/api"
+// Llamadas a la API
+import { loadTasks } from "./handlers/loadTasks"
+import { createTask } from "./handlers/createTask"
+import { removeTask } from "./handlers/deleteTask"
+import { updateInfo } from "./handlers/updateTask"
+import { updateCheck } from "./handlers/updateCheck"
+
 
 const App = () => {
   const [tasks, setTasks] = useState([]) // Estado que almacena las tareas
   const [loading, setLoading] = useState(false) // Estado que indica si esta cargando las tareas
-  const [message, setMessage] = useState(null) // Estado que muestra mensaje de exito
-  const [messageError, setMessageError] = useState(null) // Estado que muestra mensajes de error
+  // const [message, setMessage] = useState(null) // Estado que muestra mensaje de exito
+  const [message, showNotification] = useNotification()
+  // const [messageError, setMessageError] = useState(null) // Estado que muestra mensajes de error
+  const [messageError, showNotificationError] = useNotification() // Estado que muestra mensajes de error
 
-  const [taskInfo, setTaskInfo] = useState({ // Estado que almacena la informacion de la tarea por agregar
+  const [newTaskInfo, setNewTaskInfo, resetEdit] = useForm({ // Estado que almacena la nueva informacion de una tarea
+    title: '',
+    description: '',
+    priority: 'baja',
+  })
+
+  // Llamamos a nuestro custom hook para actualizar los valores
+  const [taskInfo, handleInputChange, resetForm] = useForm({
     title: '',
     description: '',
     priority: 'baja',
     completed: false
-  })
-
-  const [newTaskInfo, setNewTaskInfo] = useState({ // Estado que almacena la nueva informacion de una tarea
-    newTitle: '',
-    newDescription: '',
-    newPriority: 'baja'
   })
 
   const [notTitle, setNotTitle] = useState(0) // Estado que cuenta cuantas tareas no tienen titulo
@@ -42,68 +57,17 @@ const App = () => {
         // Usamos un timeout que dura 3 segundos
         await new Promise(resolve => setTimeout(resolve, 3000))
 
-        const tasks = await getAll()
+        const tasks = await loadTasks()
         setTasks(tasks) // Actualizamos el estado con las tareas
       } catch (error) {
-        setMessageError('Error al obtener las tareas')
-
-        setTimeout(() => {
-          setMessageError(null)
-        }, 3000)
+        // En caso de error le informamos al usuario
+        showNotificationError('Error al obtener las tareas', 3000)
       } finally {
         setLoading(false) // Actualizamos el estado en false
       }
     }
     fetchTasks()
   }, [])
-
-  // Funcion que maneja el titulo de la tarea
-  const handleChangeTitle = (e) => {
-    setTaskInfo({
-      ...taskInfo,
-      title: e.target.value
-    })
-  }
-
-  // Funcion que maneja la descripcion de la tarea
-  const handleChangeDescription = (e) => {
-    setTaskInfo({
-      ...taskInfo,
-      description: e.target.value
-    })
-  }
-
-  // Funcion que maneja la prioridad de la tarea
-  const handleChangePriority = (e) => {
-    setTaskInfo({
-      ...taskInfo,
-      priority: e.target.value
-    })
-  }
-
-  // Funcion que maneja la actualizacion del titulo de la tarea
-  const handleChangeNewTitle = (e) => {
-    setNewTaskInfo({
-      ...newTaskInfo,
-      newTitle: e.target.value
-    })
-  }
-
-  // Funcion que maneja la actualizacion de la descripcion de la tarea
-  const handleChangeNewDescription = (e) => {
-    setNewTaskInfo({
-      ...newTaskInfo,
-      newDescription: e.target.value
-    })
-  }
-
-  // Funcion que maneja la actualizacion del titulo de la tarea
-  const handleChangeNewPriority = (e) => {
-    setNewTaskInfo({
-      ...newTaskInfo,
-      newPriority: e.target.value
-    })
-  }
 
   // Funcion que maneja el valor de la busqueda
   const handleChangeSearch = (e) => {
@@ -117,7 +81,7 @@ const App = () => {
 
     try {
       // Obtenemos las tareas
-      const tasks = await getAll()
+      const tasks = await loadTasks()
       // Variable para almacenar las tareas filtradas
       let filteredTasks
 
@@ -143,11 +107,8 @@ const App = () => {
         // Error para filtros invalidos
         default: {
           filteredTasks = []
-          setMessageError('Filtro no valido')
 
-          setTimeout(() => {
-            setMessageError(null)
-          }, 3000)
+          showNotificationError('Filtro no valido', 3000)
 
           return
         }
@@ -157,94 +118,50 @@ const App = () => {
       setTasks(filteredTasks)
     } catch (error) {
       // Si hay un error se le informa al usuario
-      setMessageError(`Error al filtrar por ${filter}`)
-
-      setTimeout(() => {
-        setMessageError(null)
-      }, 3000)
+      showNotificationError(`Error al filtrar por ${filter}`, 3000)
     }
   }
 
   // Funcion para agregar tarea
   const handleAddTask = async (e) => {
-    e.preventDefault() // Evitamos el comportamiento por defecto
-
-
-    // Si no se le pasa un titulo se le suma 1 al estado de notTitle
-    if (!taskInfo.title) {
-      setNotTitle(notTitle + 1)
-    }
-
-    // Creamos la estructura de la nueva tarea
-    const newTask = {
-      title: taskInfo.title ? taskInfo.title : `sin_titulo_${notTitle}`, // Si no se le pasa un titulo se le agregara uno por default 'sin_titulo'
-      description: taskInfo.description,
-      priority: taskInfo.priority,
-      completed: false
-    }
-
-    // Llamamos a la funcion que la agrega
     try {
-      const addedTask = await addTask(newTask)
-      setTasks(prevTasks => prevTasks.concat(addedTask)) // Actualizamos el estado agregando la nueva tarea
-
-      setMessage(`La tarea '${newTask.title}' se ah agregado`) // Le avisamos al usuario que todo salio bien
-
-      // Borramos el mensaje
-      setTimeout(() => {
-        setMessage(null)
-      }, 2000)
+      e.preventDefault() // Evitamos el comportamiento por defecto
+      // // Llamamos a la funcion que la agrega
+      const newTask = await createTask({ taskInfo, notTitle })
+      setTasks(prevTasks => prevTasks.concat(newTask)) // Actualizamos el estado agregando la nueva tarea
+      // Le avisamos al usuario que todo salio bien
+      showNotification(`La tarea ${newTask.title} se ha agregado`, 2000)
 
       // Limpiamos los inputs
-      setTaskInfo({
-        title: '',
-        description: '',
-        priority: 'baja'
-      })
-
+      resetForm()
     } catch (error) {
       // Si hay un error le informamos al usuario
-      setMessageError(`Error al agregar la tarea '${newTask.title}'`)
-
-      // Borramos el mensaje
-      setTimeout(() => {
-        setMessageError(null)
-      }, 3000)
+      showNotificationError(`Error al agregar la tarea ${taskInfo.title}`, 3000)
     }
-
 
   }
 
   // Funcion para eliminar tarea
   const handleDeleteTask = async (e) => {
-    const taskId = e.target.parentElement.parentElement.parentElement.id // Obtenemos su id
     const taskTitle = e.target.parentElement.previousElementSibling.firstChild.nextElementSibling.textContent // Obtenemos el titulo
+    const taskId = e.target.parentElement.parentElement.parentElement.id // Obtenemos su id
 
+    // Llamamos a la funcion  para eliminarla
     if (window.confirm(`Desea eliminar la tarea '${taskTitle}'`)) {
-      // Llamamos a la funcion  para eliminarla
       try {
-        const deletedTask = await deleteTask(taskId)
+        const deletedTask = await removeTask(taskId)
         // Actualizamos el estado para que no aparezca la tarea eliminada
         setTasks(tasks.filter(task => task.id !== deletedTask.id))
 
         // Le avisamos al usuario que todo salio bien
-        setMessage(`${deletedTask.title} se ha eliminado correctamente`)
+        showNotification(`'${deletedTask.title}' se ha eliminado correctamente`, 2000)
 
-        // Borramos el mensaje
-        setTimeout(() => {
-          setMessage(null)
-        }, 2000)
       } catch (error) {
         // Si se intenta eliminar una tarea que existe se le informa al usuario
-        setMessageError(`'${taskTitle}' ya ha sido eliminado del servidor`)
+        showNotificationError(`'${taskTitle}' ya ha sido eliminado del servidor`, 3000)
 
         // Borramos la tarea que da error
         setTasks(tasks.filter(task => task.id !== taskId))
-
-        // Borramos el mensaje
-        setTimeout(() => {
-          setMessageError(null)
-        }, 3000)
       }
     } else {
       return
@@ -252,59 +169,34 @@ const App = () => {
   }
 
   // Funcion para actualizar tarea
-  const handlUpdateTask = async (e) => {
+  const handleUpdateTask = async (e) => {
     e.preventDefault() // Evitamos el comportamiento por defecto
-    const taskId = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.id // Obtenemos el id
     const formModal = e.target.parentElement.parentElement // Obtenemos la ventana del formulario
-
-    formModal.classList.remove('show') // Hacemos que se oculte
-
-    // Creamos la estructura de la tarea actualizada
-    const newInfo = {
-      title: newTaskInfo.newTitle,
-      description: newTaskInfo.newDescription,
-      priority: newTaskInfo.newPriority
-    }
-
+    const taskId = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.id
     // Llamamos a la funcion que actualiza la tarea
     try {
-      const updatedTask = await updateTask(taskId, newInfo)
+      const updatedTask = await updateInfo(newTaskInfo, taskId)
       // Mostramos los cambios
       setTasks(tasks.map(task => {
         return task.id === updatedTask.id ? { ...task, title: updatedTask.title, description: updatedTask.description, priority: updatedTask.priority } : task
       }))
 
-      // Le decimos al usuario que se actualizo correctamente
-      setMessage(`'${updatedTask.title}' se ha actualizado correctamente`)
+      formModal.classList.remove('show') // Hacemos que se oculte
 
-      // Borramos el mensaje
-      setTimeout(() => {
-        setMessage(null)
-      }, 2000)
+      // Le decimos al usuario que se actualizo correctamente
+      showNotification(`'${updatedTask.title}' se ha actualizado correctamente`, 2000)
 
       // Limpiamos los inputs
-      setNewTaskInfo({
-        newTitle: '',
-        newDescription: '',
-        newPriority: 'baja'
-      })
+      resetEdit()
     } catch (error) {
       // SI se intenta actualizar una tarea eliminada se le informara al usuario
-      setMessageError(`'${newInfo.title}' ya ha sido eliminada del servidor`)
+      showNotificationError(`'${newTaskInfo.title}' ya ha sido eliminada del servidor`, 3000)
+
       // Quitamos la tarea que se intenta actualizar
       setTasks(tasks.filter(task => task.id !== taskId))
 
-      // Borramos el mensaje
-      setTimeout(() => {
-        setMessageError(null)
-      }, 3000)
-
-      // LImpiamos los inputs
-      setNewTaskInfo({
-        newTitle: '',
-        newDescription: '',
-        newPriority: 'baja'
-      })
+      // Limpiamos los inputs
+      resetEdit()
     }
   }
 
@@ -313,40 +205,16 @@ const App = () => {
     // Obtenemos el id
     const taskId = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.id
 
-    // Si el checkbox esta checkeado llama a la funcion que actualiza el check y lo pondra en true
-    if (e.target.checked) {
-      try {
-        const newCheck = await updateCheck(taskId, { completed: true })
-        // Se muestran los cambios
-        setTasks(tasks.map(task => {
-          return task.id === newCheck.id ? { ...task, completed: newCheck.completed } : task
-        }))
-      } catch (error) {
-        //Si hay un error le avisamos al usuario
-        setMessageError(`Error al marcar como completado`)
+    try {
+      const completed = e.target.checked
 
-        // Borramos el mensaje
-        setTimeout(() => {
-          setMessageError(null)
-        }, 3000)
-      }
-    } else {
-      try {
-        const newCheck = await updateCheck(taskId, { completed: false })
+      const newCheck = await updateCheck(taskId, { completed: completed })
 
-        // Se muestran los cambios
-        setTasks(tasks.map(task => {
-          return task.id === newCheck.id ? { ...task, completed: newCheck.completed } : task
-        }))
-      } catch (error) {
-        // Si hay un error al desmarcar le avisamos al usuario
-        setMessageError(`Error al desmarcar`)
-
-        // Borramos el mensaje
-        setTimeout(() => {
-          setMessage(null)
-        }, 3000)
-      }
+      setTasks(tasks.map(task => {
+        return task.id === newCheck.id ? { ...task, completed: newCheck.completed } : task
+      }))
+    } catch (error) {
+      showNotificationError(`Error al ${e.target.checked ? 'marcar como completado' : 'desmarcar'}`, 3000)
     }
   }
 
@@ -358,10 +226,10 @@ const App = () => {
         <Notification message={message} />
         <NotificationError message={messageError} />
 
-        < FormTask onSubmit={handleAddTask} taskInfo={taskInfo} onChangeTitle={handleChangeTitle} onChangeDescription={handleChangeDescription} onChangePriority={handleChangePriority} onChangeFilter={handleChangeFilter} />
+        < FormTask onSubmit={handleAddTask} taskInfo={taskInfo} onChange={handleInputChange} onChangeFilter={handleChangeFilter} />
 
         {/* Si loading es true se mostrara el loader y si es false se mostrara la lista de tareas */}
-        {loading ? <Loader /> : <Tasks tasks={tasks} searchValue={searchValue} onClickCheck={handleCheckTask} onClickDelete={handleDeleteTask} onClickUpdate={handlUpdateTask} onChangeTitle={handleChangeNewTitle} onChangeDescription={handleChangeNewDescription} onChangePriority={handleChangeNewPriority} title={newTaskInfo.newTitle} description={newTaskInfo.newDescription} priority={newTaskInfo.newPriority} />}
+        {loading ? <Loader /> : <Tasks tasks={tasks} searchValue={searchValue} onClickCheck={handleCheckTask} onClickDelete={handleDeleteTask} onClickUpdate={handleUpdateTask} handleInputChange={setNewTaskInfo} newTaskInfo={newTaskInfo} />}
       </div>
     </div>
   )

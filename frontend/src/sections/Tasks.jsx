@@ -3,7 +3,7 @@ import FormEdit from "./FormEdit"
 import TrashSwitcher from "../components/ImageSwitcher/TrashSwitcher"
 import EditSwitcher from "../components/ImageSwitcher/EditSwitcher"
 
-const Tasks = ({ tasks, searchValue, onClickCheck, onClickDelete, onClickUpdate, onChangeTitle, onChangeDescription, onChangePriority, title, description, priority }) => {
+const Tasks = ({ tasks, searchValue, onClickCheck, onClickDelete, onClickUpdate, handleInputChange, newTaskInfo }) => {
 
     const handleShowDescription = (e) => {
         const descriptionModal = e.target.parentElement.parentElement.nextElementSibling
@@ -60,7 +60,7 @@ const Tasks = ({ tasks, searchValue, onClickCheck, onClickDelete, onClickUpdate,
                                         <img src="./dark/deploy-icon.svg" alt="" onClick={handleShowDescription} className="cursor-pointer w-[30px] hidden dark:block" title="Mostrar descripcion" />
                                         <TrashSwitcher onClick={onClickDelete} />
                                         <EditSwitcher onClick={handleShowForm} task={task} />
-                                        <FormEdit title={task.title} titleValue={title} descriptionValue={description} priorityValue={priority} onSubmit={onClickUpdate} newTitle={onChangeTitle} newDescription={onChangeDescription} newPriority={onChangePriority} />
+                                        <FormEdit title={task.title} onSubmit={onClickUpdate} handleInputChange={handleInputChange} newTaskInfo={newTaskInfo} />
                                     </div>
                                 </div>
                                 <div className="bg-blue-chill-300 dark:bg-blue-chill-600 h-auto px-2 py-3 hidden small-smartphone:w-full" id="description-container">
