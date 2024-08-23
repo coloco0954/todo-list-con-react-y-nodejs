@@ -2,29 +2,19 @@ import AddButton from '../components/AddButton'
 import Filters from './Filters'
 import FilterSwitcher from '../components/ImageSwitcher/FilterSwitcher'
 import DeploySwitcher from '../components/ImageSwitcher/DeploySwitcher'
+import { animateSlide } from '../utils/slideAnimation'
+import { animateHide } from '../utils/hideAnimation'
 
 const FormTask = ({ onSubmit, taskInfo, onChange, onChangeFilter }) => {
 
     const handleShowAllOptions = (e) => {
         const moreOptionsContainer = document.getElementById('more-options')
-
+        const deployIcon = e.target
 
         if (moreOptionsContainer.classList.contains('hidden')) {
-            e.target.classList.remove('animate-roll-in', 'animate-duration-normal');
-            e.target.classList.add('animate-rotate-90', 'animate-duration-normal');
-
-            moreOptionsContainer.classList.remove('hidden', 'animate-slide-out-top', 'animate-duration-fast');
-            moreOptionsContainer.classList.add('animate-duration-normal', 'animate-slide-in-top');
+            animateSlide(deployIcon, moreOptionsContainer)
         } else {
-            e.target.classList.remove('animate-rotate-90', 'animate-duration-normal');
-            e.target.classList.add('animate-roll-in', 'animate-duration-normal');
-
-            moreOptionsContainer.classList.remove('animate-duration-normal', 'animate-slide-in-top');
-            moreOptionsContainer.classList.add('animate-slide-out-top', 'animate-duration-faster');
-
-            setTimeout(() => {
-                moreOptionsContainer.classList.add('hidden');
-            }, 40); // Ajusta el tiempo para que coincida con la duración de la animación
+            animateHide(deployIcon, moreOptionsContainer, 40)
         }
 
 

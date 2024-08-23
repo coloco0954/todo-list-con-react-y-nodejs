@@ -2,28 +2,19 @@ import CheckTask from "../components/CheckTask"
 import FormEdit from "./FormEdit"
 import TrashSwitcher from "../components/ImageSwitcher/TrashSwitcher"
 import EditSwitcher from "../components/ImageSwitcher/EditSwitcher"
+import { animateSlide } from "../utils/slideAnimation"
+import { animateHide } from "../utils/hideAnimation"
 
 const Tasks = ({ tasks, searchValue, onClickCheck, onClickDelete, onClickUpdate, handleInputChange, newTaskInfo }) => {
 
     const handleShowDescription = (e) => {
         const descriptionModal = e.target.parentElement.parentElement.nextElementSibling
+        const deployIcon = e.target
 
         if (descriptionModal.classList.contains("hidden")) {
-            e.target.classList.remove('animate-roll-in', 'animate-duration-normal')
-            e.target.classList.add('animate-rotate-90', 'animate-duration-normal')
-
-            descriptionModal.classList.remove('hidden', 'animate-slide-out-top', 'animate-duration-fast')
-            descriptionModal.classList.add('animate-duration-normal', 'animate-slide-in-top')
+            animateSlide(deployIcon, descriptionModal)
         } else {
-            e.target.classList.remove('animate-rotate-90', 'animate-duration-normal')
-            e.target.classList.add('animate-roll-in', 'animate-duration-normal')
-
-            descriptionModal.classList.remove('animate-duration-normal', 'animate-slide-in-top')
-            descriptionModal.classList.add('animate-slide-out-top', 'animate-duration-faster')
-
-            setTimeout(() => {
-                descriptionModal.classList.add('hidden')
-            }, 25)
+            animateHide(deployIcon, descriptionModal, 25)
         }
     }
 
